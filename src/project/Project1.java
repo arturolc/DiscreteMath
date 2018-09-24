@@ -23,9 +23,6 @@ public class Project1 {
 		return subsetA;
 	}
 	
-	private List<Integer> getSubsetB() {
-		return subsetB;
-	}
 	
 	private List<Boolean> getSetArray(List<Integer> subset) {
 	int index;
@@ -51,7 +48,7 @@ public class Project1 {
 	}
 	
 	private List<Integer> intersection() {
-		int index, greatestLength;
+		int index;
 		List<Integer> result = new ArrayList<>();
 		
 		if (subsetA.size() > subsetB.size()) {
