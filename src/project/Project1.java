@@ -56,15 +56,25 @@ public class Project1 {
 		
 		if (subsetA.size() > subsetB.size()) {
 			for (int i = 0; i < subsetA.size(); i++) {
-				
+				index = Collections.binarySearch(subsetB, subsetA.get(i));
+				if (index >= 0)	result.add(index);
 			}
 		}
+		else {
+			for (int i = 0; i < subsetB.size(); i++) {
+				index = Collections.binarySearch(subsetA, subsetB.get(i));
+				if (index >= 0)	result.add(index);
+			}
+		}
+		return result;
 	}
+	
 	public static void main(String[] args) {
-		
 		Project1 p = new Project1();
 
 		System.out.println("A = " + p.getSetArray(p.getSubsetA()));
+		System.out.println("A union B" + p.getSetArray(p.union()));
+		System.out.println("A intersection B" + p.getSetArray(p.intersection()));
 		
 
 	}
