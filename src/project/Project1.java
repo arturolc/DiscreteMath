@@ -3,7 +3,9 @@ package project;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Project1 {
 	List<Integer> universalSet = new ArrayList<>();
@@ -19,6 +21,7 @@ public class Project1 {
 		Collections.sort(subsetA);
 		Collections.sort(subsetB);
 	}
+	
 	private List<Integer> getSubsetA() {
 		return subsetA;
 	}
@@ -37,13 +40,11 @@ public class Project1 {
 	}
 	
 	private List<Integer> union() {
-		int index;
 		List<Integer> result = new ArrayList<>();
-		
-		for (int i = 0; i < subsetA.size(); i++) {
-			index = Collections.binarySearch(subsetB, subsetA.get(i));
-			if (index >= 0) result.add(subsetA.get(i));
-		}
+		Set<Integer> set = new HashSet<>();
+		set.addAll(subsetA);
+		set.addAll(subsetB);
+		result.addAll(set);
 		return result;
 	}
 	
@@ -54,15 +55,42 @@ public class Project1 {
 		if (subsetA.size() > subsetB.size()) {
 			for (int i = 0; i < subsetA.size(); i++) {
 				index = Collections.binarySearch(subsetB, subsetA.get(i));
-				if (index >= 0)	result.add(index);
+				if (index >= 0)	result.add(subsetA.get(i));
 			}
 		}
 		else {
 			for (int i = 0; i < subsetB.size(); i++) {
 				index = Collections.binarySearch(subsetA, subsetB.get(i));
-				if (index >= 0)	result.add(index);
+				if (index >= 0)	result.add(subsetB.get(i));
 			}
 		}
+		return result;
+	}
+	
+	private List<Integer> difference(List<Integer> subset) {
+		List<Integer> other = new ArrayList<>();
+		List<Integer> result = new ArrayList<>(subset);
+		
+		// Determine the order of difference
+		if (result.equals(subsetA))	other = new ArrayList<>(subsetB);
+		else						other = new ArrayList<>(subsetA);
+		
+		for (int i = 0; i < other.size(); i++) {
+			if (Collections.binarySearch(result, other.get(i)) >= 0) {
+				result.remove(Collections.binarySearch(result, other.get(i)));
+				Collections.sort(result);
+			}
+		}
+		return result;
+	}
+	
+	private List<Integer> exclusiveOr() {
+		List<Integer> result = union();
+		List<Integer> intersection = intersection();
+		
+		for (int i = 0; i < intersection.size(); i++)
+			result.remove(Collections.binarySearch(result, intersection.get(i)));
+	
 		return result;
 	}
 	
@@ -70,8 +98,10 @@ public class Project1 {
 		Project1 p = new Project1();
 
 		System.out.println("A = " + p.getSetArray(p.getSubsetA()));
-		System.out.println("A union B" + p.getSetArray(p.union()));
-		System.out.println("A intersection B" + p.getSetArray(p.intersection()));
+		System.out.println("A union B = " + p.getSetArray(p.union()));
+		System.out.println("A intersection B = " + p.getSetArray(p.intersection()));
+		System.out.println("A difference B = " + p.getSetArray(p.difference(p.getSubsetA())));
+		System.out.println("A exclusiveOR B = " + p.getSetArray(p.exclusiveOr()));
 		
 
 	}
